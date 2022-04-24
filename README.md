@@ -26,4 +26,4 @@ cat ~/.ssh/id_rsa.pub
 ### Reference
 [Git Permission denied (publickey). fatal: Could not read from remote repository Solution](https://careerkarma.com/blog/git-permission-denied-publickey/)
 
-EOF (2022/04/24))
+EOF (2022/04/24)
