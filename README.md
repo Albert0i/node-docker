@@ -26,4 +26,19 @@ cat ~/.ssh/id_rsa.pub
 ### Reference
 [Git Permission denied (publickey). fatal: Could not read from remote repository Solution](https://careerkarma.com/blog/git-permission-denied-publickey/)
 
+
+### Watchtower
+Use watchtower to automatically update the node-app image: 
+```
+docker run -d --rm --name watchtower \
+    -e WATCHTOWER_TRACE=true -e WATCHTOWER_DEBUG=true -e WATCHTOWER_POLL_INTERVAL=60 \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    containrrr/watchtower app_node-app_1
+
+docker logs watchtower --follow 
+```
+### Reference
+[containrrr/watchtower](https://github.com/containrrr/watchtower)
+
+
 EOF (2022/04/24)
