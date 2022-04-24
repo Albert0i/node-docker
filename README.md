@@ -1,5 +1,10 @@
 # node-docker
 
+### Note
+<p>
+<strong>git@github.com: Permission denied (publickey). <br />
+fatal: Could not read from remote repository.</strong>
+<p>
 You may encounter this error if you have not yet added an SSH key to your version control account. 
 
 1. Open GitHub, click on your avatar on the top-right corner and click “Settings”
@@ -18,7 +23,7 @@ cat ~/.ssh/id_rsa.pub
 ```
 5. This will give you the string you need to upload into your version control system.
 
-## Reference:
-1. [Git Permission denied (publickey). fatal: Could not read from remote repository Solution](https://careerkarma.com/blog/git-permission-denied-publickey/)
+### Reference
+[Git Permission denied (publickey). fatal: Could not read from remote repository Solution](https://careerkarma.com/blog/git-permission-denied-publickey/)
 
 EOF (2022/04/24))
