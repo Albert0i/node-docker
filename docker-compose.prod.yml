@@ -33,8 +33,15 @@ services:
 #
 # Swarm commands:
 #   docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml myapp
-#
-#
+#   docker node ls
+#   docker stack ls 
+#   docker stack service myapp
+#   docker ps
+#   docker service ls
+#   docker stack ps myapp 
+#   
+#   
+#   
 
 #
 # [v1.25.0] "Only pull images that can't be built" should be optional #7103
