@@ -32,7 +32,9 @@ services:
 # docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build -V
 # docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 # docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --no-deps node-app
-#
+# docker-compose --verbose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# docker-compose --verbose --log-level=DEBUG -f docker-compose.yml -f docker-compose.prod.yml up -d
+# 
 #2 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --scale node-app=2
 # docker-compose -f docker-compose.yml -f docker-compose.dev.yml config > dev.yml
 #
