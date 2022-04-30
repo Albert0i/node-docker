@@ -20,3 +20,16 @@ services:
       environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+
+#
+# [v1.25.0] "Only pull images that can't be built" should be optional #7103
+# https://github.com/docker/compose/issues/7103
+# 
+# It seems to be due to the Only pull images that can't be built feature of v1.25.0 (v1.24.1 doesn't have this issue).
+# yep, confirmed. 1.25.1-rc1 solves the issue. Waiting for stable release 
+#
+# So, if you want to use docker-compose pull node-app in production environment, 
+# be sure to COMMENT OUT line 8~11.
+# 
+# EOF (2022/04/30)
+#
