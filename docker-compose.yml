@@ -8,7 +8,6 @@ services:
     - node-app
 
   node-app:
-    build: .
     image: albert0i/node-app
     environment:
       - PORT=3000
