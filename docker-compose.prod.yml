@@ -40,8 +40,6 @@ services:
 #   docker service ls
 #   docker stack ps myapp 
 #   
-#   
-#   
 
 #
 # [v1.25.0] "Only pull images that can't be built" should be optional #7103
