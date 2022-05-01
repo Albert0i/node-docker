@@ -7,7 +7,7 @@ services:
   node-app:
 
     deploy:
-      replicas: 3
+      replicas: 2
       restart_policy:
         condition: any
       update_config:
