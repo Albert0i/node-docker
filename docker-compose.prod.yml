@@ -31,6 +31,13 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
 
+  viz:
+    image: dockersamples/visualizer
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+    - "8080:8080"
+
 #
 # Swarm commands:
 #   docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml myapp
@@ -54,5 +61,5 @@ services:
 # So, if you want to use docker-compose pull node-app in production environment, 
 # be sure to COMMENT OUT line 17~20.
 # 
-# EOF (2022/05/02)
+# EOF (2022/05/08)
 #
