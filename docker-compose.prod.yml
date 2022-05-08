@@ -30,16 +30,19 @@ services:
       environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-
-  visualizer:
-    image: dockersamples/visualizer
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    ports:
-      - "8080:8080"
-    deploy:
+      deploy:
       placement:
           constraints: [node.role == manager]
+
+  visualizer:
+      image: dockersamples/visualizer
+      volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+      ports:
+        - "8080:8080"
+      deploy:
+        placement:
+            constraints: [node.role == manager]
 
 #
 # Swarm commands:
