@@ -31,8 +31,9 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       deploy:
-      placement:
-          constraints: [node.role == manager]
+        replicas: 1
+        placement:
+            constraints: [node.role == manager]
 
   visualizer:
       image: dockersamples/visualizer
@@ -41,6 +42,7 @@ services:
       ports:
         - "8080:8080"
       deploy:
+        replicas: 1
         placement:
             constraints: [node.role == manager]
 
