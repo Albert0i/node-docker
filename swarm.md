@@ -20,25 +20,25 @@ in favour of more powerful CPUs.
 ## II. Docker swarm ingress network
 Docker swarm makes use a special overlay network **ingress** to facilitate load balancing among a service’s nodes. The ingress network is created automatically when you initialize or join a swarm. Most users do not need to customize its configuration, but Docker allows you to do so.[[2]](https://docs.docker.com/engine/swarm/networking/)
 
-By default, ingress network resides in "10.0.0.0/24" which collide the default Virtual Cloud Networks (VCN), therefore the ingress network doesn’t appear to be working properly! [[3]](https://www.reddit.com/r/docker/comments/n0djds/docker_swarm_on_oracle_always_free_tier_nodes_no) 
+By default, ingress network resides in "10.0.0.0/24" which collides with default Virtual Cloud Networks (VCN), therefore the ingress network doesn’t appear to be working properly! [[3]](https://www.reddit.com/r/docker/comments/n0djds/docker_swarm_on_oracle_always_free_tier_nodes_no) 
 
 In addition, all traffic between clients is blocked by default in Oracle cloud. The solution is to add rules for your subnet to the security list of the VCN the VMs are connected to. [[4]](https://stackoverflow.com/questions/65115349/unable-to-join-docker-swarm-using-oracle-cloud-vms-connected-to-the-same-vcn)
 
 
 ## III. Virtual Cloud Networks (VCN)
 Free Tier tenancies can have up to 2 virtual cloud networks (VCNs). 
-- Open Oracle Cloud Menu by clicking the left upper <font size=32>≡</font>;
-- Choose Networking → Virtual Cloud Networks → Create VCN;
-- Give it a name **vcn-20220502-2201** for example, the subnet can be "10.10.1.0/24" or something else;
+- Open Oracle Cloud Menu by clicking the left upper <font size=32>≡</font>
+- Choose Networking → Virtual Cloud Networks → Create VCN
+- Give it a name **vcn-20220502-2201** for example, the subnet can be "10.10.1.0/24" or something else
 ---
-- On the public subnet created, click to edit the **Default Security List**;
-- Add **Ingress Rules** for port 80, 8080, 3000, 8000, and 443 etc;
-- Add two more **Ingress Rules** for subnet "10.10.0.0/16' TCP and UDP traffics. 
+- On the public subnet created, click to edit the **Default Security List**
+- Add **Ingress Rules** for port 80, 8080, 3000, 8000, and 443 etc
+- Add two more **Ingress Rules** for subnet "10.10.0.0/16' TCP and UDP traffics
 ---
-- Once created, subsequent creation of instances will use this customized network;
-- OCI instances can't attach more than one networks;
-- You can choose network settings ONLY in instance creation;
-- OCI instance can't change network settings. 
+- Once created, subsequent creation of instances will use this customized network
+- OCI instances can't attach more than one networks
+- You can choose network settings ONLY in instance creation
+- OCI instance can't change network settings
 
 
 ## IV. OCI Instances 
