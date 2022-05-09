@@ -1,4 +1,4 @@
-# Docker swarm on Oracle Cloud (Free Tier) --- 
+# Docker swarm on Oracle Cloud (Free Tier)<br /> ─ 窮L的後現代生活
 
 ## I. Oracle Cloud Infrastructure (OCI)
 Regarding to the number of compute instances available to Oracle Free Tier account. Following are excerpts from [[1]](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm). 
@@ -152,339 +152,39 @@ To add a manager to this swarm, run the following command:
 6. [dockersamples/docker-swarm-visualizer](https://github.com/dockersamples/docker-swarm-visualizer)
 7. [Text Art](https://fsymbols.com/text-art/)
 
-## EOF (2022/05/09)
 
-
-
-
-
-.------------.
-| 2022/05/09 |
-`------------'
-
-.profile
-.bash_logout
-.env
-
-
-sudo apt-get update -y
-sudo apt install docker.io -y
-sudo apt install docker-compose -y
-sudo apt install fortune-mod -y
-sudo apt install cowsay -y
-sudo apt install mc -y
-
-sudo chmod 666 /var/run/docker.sock
-sudo usermod -aG docker ${USER}
-
-
-docker swarm init --advertise-addr 10.10.0.65
-
-To add a worker to this swarm, run the following command:
-
-    docker swarm join --token SWMTKN-1-0t7xb0wo9ttl75ofimvlikhgprmqtvz8f8yfyarub5b0que9g3-bgl7zox94yqhwpogb2eln5e4d 10.10.0.65:2377
-
-To add a manager to this swarm, run the following command:
-
-    docker swarm join --token SWMTKN-1-0t7xb0wo9ttl75ofimvlikhgprmqtvz8f8yfyarub5b0que9g3-782k5kk40a2itv8fmbrxxmorn 10.10.0.65:2377
-
-.--------------------------------------.
-| Name |  Private Ip |    Public Ip    |
-|------+-------------+-----------------|
-| mgr  | 10.10.0.65  | 132.145.115.172 |
-| wkr1 | 10.10.0.68  | 138.2.22.169    |
-| wkr2 | 10.10.0.203 | 152.70.108.230  |
-| wkr3 | 10.10.0.23  | 140.238.40.147  |
-`--------------------------------------'
-
-sudo systemctl status ufw
-sudo systemctl disable ufw
-sudo systemctl stop ufw
-sudo systemctl status ufw
-
-sudo systemctl status iptables
-sudo systemctl disable iptables
-sudo systemctl stop iptables
-sudo systemctl status iptables
-
-All traffic between clients is blocked by default in Oracle cloud. 
-The solution is to add rules for the mentioned ports to the security list of the VCN the VMs are connected to. 
-After that everything works as expected.
-
-Reference:
-1. Docker Swarm on Oracle always free tier nodes: no route to host
-https://www.reddit.com/r/docker/comments/n0djds/docker_swarm_on_oracle_always_free_tier_nodes_no/
-
-2. Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.24/images/json?all=1: dial unix /var/run/docker.sock: connect: permission denied code example
-   https://shouland.com/shell-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket-at-unix-var-run-docker-sock-get-http-2fvar-2frun-2fdocker-sock-v1-24-images-json-all-1-dial-unix-var-run-docker-sock-connect-permission-denied-code-example
-
-3. Unable to join docker swarm using Oracle Cloud VMs connected to the same VCN
-   https://stackoverflow.com/questions/65115349/unable-to-join-docker-swarm-using-oracle-cloud-vms-connected-to-the-same-vcn
-
-4. dockersamples/visualizer
-   https://hub.docker.com/r/dockersamples/visualizer
-   https://github.com/dockersamples/docker-swarm-visualizer
-   https://github.com/dockersamples/docker-swarm-visualizer/issues/57
-
-5. Always Free Resources
-   https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm
-
-
-EOF (2022/05/09)
-
-
-
-
-
-
-Initialization
-docker swarm init --advertise-addr 10.0.0.33
-
-To add a worker to this swarm, run the following command:
-
-    docker swarm join --token SWMTKN-1-22vhoyiju7me7dgrs210938syw8ige7d4nhhylx2o1ob10ngal-4oz8z73gw6buy01jji59q6dcn 10.0.0.33:2377
-
-To add a manager to this swarm, run the following command:
-
-    docker swarm join --token SWMTKN-1-22vhoyiju7me7dgrs210938syw8ige7d4nhhylx2o1ob10ngal-8omlbea4n1uu6pqkantkommak 10.0.0.33:2377
-
-Instances (2022/05/02)
-.-------------------------------------.
-| Name | Private Ip |    Public Ip    |
-|------+------------+-----------------|
-| mgr  | 10.10.0.65  | 132.145.115.172 |
-| wkr  | 10.10.0.xx  | xxx.xxx.xxx.xx  |
-`-------------------------------------'
-
-Instances 
-.-------------------------------------.
-| Name | Private Ip |    Public Ip    |
-|------+------------+-----------------|
-| vm1  | 10.0.0.33  | 150.230.106.135 |
-| vm2  | 10.0.0.19  | 168.138.204.15  |
-| vm3  | 10.0.0.XX  | XXX.XXX.XXX.XXX |
-| vm4  | 10.0.0.XX  | XXX.XXX.XXX.XXX |
-`-------------------------------------'
-
-sudo nano /etc/hosts 
-
-# 2022/05/01
-10.0.0.33	manager
-10.0.0.19	worker-01
-
-
-
-.profile
-=========
-# ~/.profile: executed by the command interpreter for login shells.
-# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
-# exists.
-# see /usr/share/doc/bash/examples/startup-files for examples.
-# the files are located in the bash-doc package.
-
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-#umask 022
-
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-        . "$HOME/.bashrc"
-    fi
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
-
-#
-# 2022/04/30
-#
-# some more ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-#alias l='ls -CF'
-alias ver='uname -a;echo "Shell  :" $SHELL; echo "Version:" $BASH_VERSION'
-alias cls='clear'
-
-# some more environment variables
-export PATH=$PATH:.
-set -o allexport;source /home/ubuntu/.env;set +o allexport
-
-#
-ver
-fortune | cowsay
-
-
-.env
-=====
-NODE_ENV=production
-
-MONGO_USER=root
-
-MONGO_PASSWORD=root
-
-SESSION_SECRET=secret
-
-MONGO_INITDB_ROOT_USERNAME=root
-
-MONGO_INITDB_ROOT_PASSWORD=root
-
-PUBLIC_IP=168.138.204.15
-
-#PRIVATE_IP=10.0.0.33
-INT_NAME="ens3" #replace accordingly
-PRIVATE_IP=$(ip addr show $INT_NAME | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-# How To Install Docker Swarm On Ubuntu 22.04|20.04
-# https://computingforgeeks.com/how-to-install-docker-swarm-on-ubuntu/
-
-
-Docker issue 
-=============
-sudo systemctl status docker
-sudo systemctl stop docker
-sudo systemctl start docker
-
-sudo usermod -a -G docker $USER
-
-Reference
-1. Cannot connect to the Docker daemon at unix:/var/run/docker.sock. Is the docker daemon running?
-   https://stackoverflow.com/questions/44678725/cannot-connect-to-the-docker-daemon-at-unix-var-run-docker-sock-is-the-docker
-
-2. Solving Docker permission denied while trying to connect to the Docker daemon socket
-   https://dhananjay4058.medium.com/solving-docker-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket-2e53cccffbaa
-
-
-EOF (2022/05/01)
-
-How to Configure the Linux Firewall for Docker Swarm on Ubuntu 16.04
-https://www.digitalocean.com/community/tutorials/how-to-configure-the-linux-firewall-for-docker-swarm-on-ubuntu-16-04
-=====
-worker node
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 2376 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 7946 -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 7946 -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 4789 -j ACCEPT
-sudo netfilter-persistent save
-=====
-
-
->>>>>
-How to Configure the Linux Firewall for Docker Swarm on CentOS 7
-https://www.digitalocean.com/community/tutorials/how-to-configure-the-linux-firewall-for-docker-swarm-on-centos-7
-sudo iptables -I INPUT 5 -p tcp --dport 2376 -j ACCEPT
-sudo iptables -I INPUT 6 -p tcp --dport 2377 -j ACCEPT
-sudo iptables -I INPUT 7 -p tcp --dport 7946 -j ACCEPT
-sudo iptables -I INPUT 8 -p udp --dport 7946 -j ACCEPT
-sudo iptables -I INPUT 9 -p udp --dport 4789 -j ACCEPT
-sudo /usr/libexec/iptables/iptables.init save
-
-
-
-<<<<<
-
-
-
-
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 2376 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 2377 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 7946 -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 7946 -j ACCEPT
-sudo iptables -A INPUT -p udp --dport 4789 -j ACCEPT
-sudo netfilter-persistent save
-
-
-
-
-
-INT_NAME="ens3" #replace accordingly
-HOST_IP=$(ip addr show $INT_NAME | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-
-HOST_IP=
-
-$(ip addr show "ens3" | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-
-
-Multi Node Swarm Cluster on Oracle Cloud Infrastructure Classic
-http://rohanwalia.blogspot.com/2018/03/multi-node-swarm-cluster-on-oracle.html
-
-Unable to join docker swarm using Oracle Cloud VMs connected to the same VCN
-https://stackoverflow.com/questions/65115349/unable-to-join-docker-swarm-using-oracle-cloud-vms-connected-to-the-same-vcn
-
-
-Ubuntu Linux Save / Restore Iptables Rules
-https://www.cyberciti.biz/faq/how-to-save-restore-iptables-firewall-config-ubuntu/
+## VII. Text Art 
 ```
-sudo -s
-iptables-save > /root/working.iptables.rules
-
-To restore it use the command iptables-restore, enter:
-iptables-restore < /root/working.iptables.rules
-```
-
-Oracle Cloud Infra connection between instances not working
-https://stackoverflow.com/questions/70484400/oracle-cloud-infra-connection-between-instances-not-working
-
-"No route to host" when trying to connect to a TCP service on an Oracle Cloud Intance
-https://superuser.com/questions/1487012/no-route-to-host-when-trying-to-connect-to-a-tcp-service-on-an-oracle-cloud-in
-
-How to show/check for open ports on Ubuntu Linux
-https://linuxconfig.org/how-to-check-for-open-ports-on-ubuntu-linux
-```
-sudo ss -ltn
-sudo ss -ltnp
-sudo nmap localhost
-sudo ufw status verbose
-```
-
-Reference:
-
-1. How to Configure the Linux Firewall for Docker Swarm on Ubuntu 16.04
-   https://www.digitalocean.com/community/tutorials/how-to-configure-the-linux-firewall-for-docker-swarm-on-ubuntu-16-04
-
-2. docker swarm join connection error from other instance and local pc
-   https://stackoverflow.com/questions/64145111/docker-swarm-join-connection-error-from-other-instance-and-local-pc
-
-3. Docker Swarm on Oracle always free tier nodes: no route to host
-   https://www.reddit.com/r/docker/comments/n0djds/docker_swarm_on_oracle_always_free_tier_nodes_no/
-
-4. Text Art
-   https://fsymbols.com/text-art/
-
-
 echo '███╗░░░███╗░█████╗░███╗░░██╗░█████╗░░██████╗░███████╗██████╗░'
 echo '████╗░████║██╔══██╗████╗░██║██╔══██╗██╔════╝░██╔════╝██╔══██╗'
 echo '██╔████╔██║███████║██╔██╗██║███████║██║░░██╗░█████╗░░██████╔╝'
 echo '██║╚██╔╝██║██╔══██║██║╚████║██╔══██║██║░░╚██╗██╔══╝░░██╔══██╗'
 echo '██║░╚═╝░██║██║░░██║██║░╚███║██║░░██║╚██████╔╝███████╗██║░░██║'
 echo '╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝░╚═════╝░╚══════╝╚═╝░░╚═╝'
-
+```
+```
 echo '░██╗░░░░░░░██╗░█████╗░██████╗░██╗░░██╗███████╗██████╗░░░███╗░░'
 echo '░██║░░██╗░░██║██╔══██╗██╔══██╗██║░██╔╝██╔════╝██╔══██╗░████║░░'
 echo '░╚██╗████╗██╔╝██║░░██║██████╔╝█████═╝░█████╗░░██████╔╝██╔██║░░'
 echo '░░████╔═████║░██║░░██║██╔══██╗██╔═██╗░██╔══╝░░██╔══██╗╚═╝██║░░'
 echo '░░╚██╔╝░╚██╔╝░╚█████╔╝██║░░██║██║░╚██╗███████╗██║░░██║███████╗'
 echo '░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝'
-
+```
+```
 echo '░██╗░░░░░░░██╗░█████╗░██████╗░██╗░░██╗███████╗██████╗░██████╗░'
 echo '░██║░░██╗░░██║██╔══██╗██╔══██╗██║░██╔╝██╔════╝██╔══██╗╚════██╗'
 echo '░╚██╗████╗██╔╝██║░░██║██████╔╝█████═╝░█████╗░░██████╔╝░░███╔═╝'
 echo '░░████╔═████║░██║░░██║██╔══██╗██╔═██╗░██╔══╝░░██╔══██╗██╔══╝░░'
 echo '░░╚██╔╝░╚██╔╝░╚█████╔╝██║░░██║██║░╚██╗███████╗██║░░██║███████╗'
 echo '░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚══════╝'
-
+```
+```
 echo '░██╗░░░░░░░██╗░█████╗░██████╗░██╗░░██╗███████╗██████╗░██████╗░'
 echo '░██║░░██╗░░██║██╔══██╗██╔══██╗██║░██╔╝██╔════╝██╔══██╗╚════██╗'
 echo '░╚██╗████╗██╔╝██║░░██║██████╔╝█████═╝░█████╗░░██████╔╝░█████╔╝'
 echo '░░████╔═████║░██║░░██║██╔══██╗██╔═██╗░██╔══╝░░██╔══██╗░╚═══██╗'
 echo '░░╚██╔╝░╚██╔╝░╚█████╔╝██║░░██║██║░╚██╗███████╗██║░░██║██████╔╝'
 echo '░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░'
+```
+
+## EOF (2022/05/09)
