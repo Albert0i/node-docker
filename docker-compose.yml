@@ -9,7 +9,7 @@ services:
     - node-app
 
   node-app:
-    image: albert0i/node-app:1.0
+    image: albert0i/node-app:1.1
     environment:
       - PORT=3000
     depends_on:
