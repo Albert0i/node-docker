@@ -15,10 +15,10 @@ services:
         parallelism: 1
         delay: 15s
 
- #   build:
- #     context: . 
- #     args: 
- #       NODE_ENV: production
+    build:
+      context: . 
+      args: 
+        NODE_ENV: production
 
     environment:
       - NODE_ENV=production
