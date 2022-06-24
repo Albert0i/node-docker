@@ -233,7 +233,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
 
 ## V. Production environment (Docker mode) 
 
-### Links
+### Links online
 &emsp;[http](http://132.145.115.172/api/v1)
 
 &emsp;[https](https://132.145.115.172:443/api/v1)
@@ -285,6 +285,7 @@ docker service scale myapp_nginx=2
 
 ## VI. Conclusion
 
+![Never was so much owed by so many to so few](img/Winston-Churchill-Quote-Never-in-the-field-of-human-conflict-was.jpg)
 
 ## VII. Reference
 1. [Learn Docker - DevOps with Node.js & Express](https://www.youtube.com/watch?v=9zUHg7xjIqQ&t=356s)
