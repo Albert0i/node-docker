@@ -283,6 +283,10 @@ docker service scale myapp_nginx=2
 ```
 ![docker service scale](img/docker_service_scale.png)
 
+```console
+```
+
+
 ## VI. Conclusion
 
 ![Never was so much owed by so many to so few](img/Winston-Churchill-Quote-Never-in-the-field-of-human-conflict-was.jpg)
