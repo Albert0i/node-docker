@@ -2,14 +2,22 @@
 
 ![Notes from Underground](img/Notes_from_Underground.jpg)
 
-## I. Introduction 
-**IT** is bizarre not to consider moving your websites to [Docker](https://www.docker.com/products/docker-desktop/) environment in 2022. While reducing hardware and software cost is one gain, another gain is [*scalability*](https://en.wikipedia.org/wiki/Scalability), the pain is to learn a new set of CLI Commands and how to write `Dockerfile`,  `docker-compose.yml` and, optionally, `Makefile`. It's always easy to get started but difficult to become an expert. The only way is by step by step learning and by applying it to more and more projects, there is no quick way to success. 
+## I. Introduction
+<span style="color:white;background:black;font-size:36px;bold:true">IT</span> is bizarre not to consider moving your websites to [Docker](https://www.docker.com/products/docker-desktop/) environment in 2022. While reducing hardware and software cost is one gain, another gain is [*scalability*](https://en.wikipedia.org/wiki/Scalability); the pain is to learn a new set of CLI Commands and  write `Dockerfile`,  `docker-compose.yml` and *optionally* `Makefile`. It's always easy to get started but difficult to become an expert. The only way is by step by step learning and applying it to more and more projects, there is no quick way to success. 
 
 
 ## II. Architecture
-[Rule of three](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) states that two instances of similar code do not require refactoring, but when similar code is used three times, it should be extracted into a new procedure. When one starts to write a website, it is not uncommon to confront with multiple environments, ie: development, staging and production. 
+ When one starts to create a website, it is not uncommon to confront with multiple environments, ie: development, staging and production... [Rule of three](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) states that two instances of similar code do not require refactoring, but when similar code is used three times, it should be extracted into a new procedure. 
+ 
+ Using multiple docker-compose.yml files enables you to customize a application for different environments or different workflows<sup>[[2]](https://docs.docker.com/compose/extends/)</sup>: 
+ 
+ > By default, Compose reads two files, a docker-compose.yml and an optional docker-compose.override.yml file. By convention, the docker-compose.yml contains your base configuration. The override file, as its name implies, can contain configuration overrides for existing services or entirely new services.
+ 
+ > f a service is defined in both files, Compose merges the configurations using the rules described in Adding and overriding configuration.
 
+ > To use multiple override files, or an override file with a different name, you can use the -f option to specify the list of files. Compose merges files in the order they’re specified on the command line. See the docker-compose command reference for more information about using -f.
 
+### docker-compose.yml 
 ```yml
 version: "3"
 services:
@@ -41,11 +49,117 @@ services:
     image: redis:6.2.6
 ```
 
+### docker-compose.dev.yml
+```yml
+version: "3"
+services:
+  nginx:
+    ports:
+      - "3000:80"
+      - "3443:443"
+
+  node-app:
+    build:
+      context: . 
+      args: 
+        NODE_ENV: development
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - MONGO_USER=root
+      - MONGO_PASSWORD=root
+      - SESSION_SECRET=secret
+    command: npm run dev 
+``` 
+
+### docker-compose.prod.yml
+```yml
+version: "3"
+services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+
+  node-app:
+
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 1
+        delay: 15s
+
+    build:
+      context: . 
+      args: 
+        NODE_ENV: production
+
+    environment:
+      - NODE_ENV=production
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - SESSION_SECRET=${SESSION_SECRET}
+    command: npm run start 
+
+  mongo:
+      environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      deploy:
+        replicas: 1
+        placement:
+            constraints: [node.role == manager]
+
+  visualizer:
+      image: dockersamples/visualizer
+      volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+      ports:
+        - "8080:8080"
+      deploy:
+        replicas: 1
+        placement:
+            constraints: [node.role == manager]
+```
+
+### Dockerfile
+```yml
+FROM node:16.8.0-alpine
+WORKDIR /app
+COPY package.json .
+#RUN npm install
+ARG NODE_ENV
+RUN if [ "$NODE_ENV" = "development" ];     \
+        then npm install;                   \
+        else npm install --only=production; \
+    fi
+COPY . .
+ENV PORT 3000
+EXPOSE $PORT 
+CMD ["npm", "run", "dev"]
+```
+
+### .env 
 ```bash
+#
+# Attention: No space before the equal sign! Otherwise, will show: 
+# "docker: poorly formatted environment: variable 'XXX ' contains whitespaces."
+#
+PORT=3000
+```
+
+```bash
+# Development
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml [options] [COMMAND] [ARGS...]
 
+# Production
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml [options] [COMMAND] [ARGS...]
 ```
+
 
 ## III. Development environment
 
@@ -169,17 +283,31 @@ docker service scale myapp_nginx=2
 ```
 ![docker service scale](img/docker_service_scale.png)
 
+## VI. Conclusion
 
-## VI. Reference
+
+## VII. Reference
 1. [Learn Docker - DevOps with Node.js & Express](https://www.youtube.com/watch?v=9zUHg7xjIqQ&t=356s)
-2. [How to generate and use a SSL certificate in NodeJS](https://www.youtube.com/watch?v=USrMdBF0zcg&t=5s) 
-3. [Quick Tip: Configuring NGINX and SSL with Node.js](https://www.sitepoint.com/configuring-nginx-ssl-node-js/?fbclid=IwAR0JfD6HPoaDWGWPXnOiub5tVXqGVPHVstGxkBo56vm8up-4HzZteEfOVxs) 
-4. [How to Use SSL/TLS with Node.js](https://www.sitepoint.com/how-to-use-ssltls-with-node-js/?fbclid=IwAR3t0OI5X6IyeVfxo_AZKX2yeqPGzRbEG8aPm9BHEdsTh1f2IJoz12ea5GU)
-5. [[v1.25.0] "Only pull images that can't be built" should be optional #7103](https://github.com/docker/compose/issues/7103) 
-6. [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/) 
+2. [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
+3. [How to generate and use a SSL certificate in NodeJS](https://www.youtube.com/watch?v=USrMdBF0zcg&t=5s) 
+4. [Quick Tip: Configuring NGINX and SSL with Node.js](https://www.sitepoint.com/configuring-nginx-ssl-node-js/?fbclid=IwAR0JfD6HPoaDWGWPXnOiub5tVXqGVPHVstGxkBo56vm8up-4HzZteEfOVxs) 
+5. [How to Use SSL/TLS with Node.js](https://www.sitepoint.com/how-to-use-ssltls-with-node-js/?fbclid=IwAR3t0OI5X6IyeVfxo_AZKX2yeqPGzRbEG8aPm9BHEdsTh1f2IJoz12ea5GU)
+6. [[v1.25.0] "Only pull images that can't be built" should be optional #7103](https://github.com/docker/compose/issues/7103) 
+7. [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/) 
 
 
-## VII. Appendix 
+## VIII. Appendix 
+
+Configuring NGINX by adding three more lines to server block in default.conf: 
+
+```nginx 
+    listen 443 ssl;
+
+    ssl_certificate  /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+```
+
+### default.conf
 
 ```nginx
 server {
