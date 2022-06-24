@@ -1,10 +1,55 @@
-# Notes from Underground
+# [Notes from Underground](https://www.gutenberg.org/files/600/600-h/600-h.htm)
 
 ![Notes from Underground](img/Notes_from_Underground.jpg)
 
-## I. Development 
+## I. Introduction 
+**IT** is bizarre not to consider moving your websites to [Docker](https://www.docker.com/products/docker-desktop/) environment in 2022. While reducing hardware and software cost is one gain, another gain is [*scalability*](https://en.wikipedia.org/wiki/Scalability), the pain is to learn a new set of CLI Commands and how to write `Dockerfile`,  `docker-compose.yml` and, optionally, `Makefile`. It's always easy to get started but difficult to become an expert. The only way is by step by step learning and by applying it to more and more projects, there is no quick way to success. 
 
-```console
+
+## II. Architecture
+[Rule of three](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) states that two instances of similar code do not require refactoring, but when similar code is used three times, it should be extracted into a new procedure. When one starts to write a website, it is not uncommon to confront with multiple environments, ie: development, staging and production. 
+
+
+```yml
+version: "3"
+services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+    - node-app
+
+  node-app:
+    image: albert0i/node-app:1.1
+    environment:
+      - PORT=3000
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:4.4
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - ./data/db:/data/db
+  
+  redis:
+    image: redis:6.2.6
+```
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml [options] [COMMAND] [ARGS...]
+
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml [options] [COMMAND] [ARGS...]
+```
+
+## III. Development environment
+
+```bash
 # Create and start containers
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d 
 
@@ -44,52 +89,53 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v
 ```
 
 
-## II. Production (Standalone mode) 
+## IV. Production environment (Standalone mode) 
 
-```console
-# 
-# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d 
-# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d 
-# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build -V
-# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
-# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --no-deps node-app
-# docker-compose --verbose -f docker-compose.yml -f docker-compose.prod.yml up -d
-# docker-compose --verbose --log-level=DEBUG -f docker-compose.yml -f docker-compose.prod.yml up -d
-# 
-#2 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --scale node-app=2
-# docker-compose -f docker-compose.yml -f docker-compose.dev.yml config > dev.yml
-#
-# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-deps node-app
-# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d mongo
-#
-# docker-compose logs node-app 
-# docker-compose exec node-app printenv
-# docker-compose exec mongo mongo -u root -p root 
-# db.books.insert({"name": "Harry Potter"});
-#
-# docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v
-# docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
+```bash
+# Create and start containers
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d 
+
+# Create and start containers. 
+# Build images before starting containers
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+
+# Create and start containers. 
+# Build images before starting containers
+# Start service "node-app". Do not start linked services.
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --no-deps node-app
+
+# Create and start containers
+# Show more output
+docker-compose --verbose -f docker-compose.yml -f docker-compose.prod.yml up -d
+ 
+# Create and start containers
+# Show more output. Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+docker-compose --verbose --log-level=DEBUG -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# Stop and remove containers, networks, images, and volumes
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
 ```
 
 
-## III. Production (Docker mode) 
+## V. Production environment (Docker mode) 
 
-[http](http://132.145.115.172/api/v1)
+### Links
+&emsp;[http](http://132.145.115.172/api/v1)
 
-[https](https://132.145.115.172:443/api/v1)
+&emsp;[https](https://132.145.115.172:443/api/v1)
 
-[visualizer](http://132.145.115.172:8080)
+&emsp;[visualizer](http://132.145.115.172:8080)
 
-```console
+###  Node
+```bash
 cd myapp 
 
-# 1) Node
 # List nodes in the swarm
 docker node ls
 ```
 
-```console
-# 2) Stack 
+### Stack 
+```bash
 # Deploy a new stack or update an existing stack
 docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml myapp
 
@@ -106,8 +152,8 @@ docker stack services myapp
 docker stack rm myapp
 ```
 
-```console
-# 3) Service
+### Service
+```bash
 # List services
 docker service ls
 
@@ -123,19 +169,43 @@ docker service scale myapp_nginx=2
 ```
 ![docker service scale](img/docker_service_scale.png)
 
-## IV. Reference
+
+## VI. Reference
 1. [Learn Docker - DevOps with Node.js & Express](https://www.youtube.com/watch?v=9zUHg7xjIqQ&t=356s)
-2. []() 
-3. []() 
-4. []()
+2. [How to generate and use a SSL certificate in NodeJS](https://www.youtube.com/watch?v=USrMdBF0zcg&t=5s) 
+3. [Quick Tip: Configuring NGINX and SSL with Node.js](https://www.sitepoint.com/configuring-nginx-ssl-node-js/?fbclid=IwAR0JfD6HPoaDWGWPXnOiub5tVXqGVPHVstGxkBo56vm8up-4HzZteEfOVxs) 
+4. [How to Use SSL/TLS with Node.js](https://www.sitepoint.com/how-to-use-ssltls-with-node-js/?fbclid=IwAR3t0OI5X6IyeVfxo_AZKX2yeqPGzRbEG8aPm9BHEdsTh1f2IJoz12ea5GU)
 5. [[v1.25.0] "Only pull images that can't be built" should be optional #7103](https://github.com/docker/compose/issues/7103) 
 6. [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/) 
 
 
+## VII. Appendix 
+
+```nginx
+server {
+    listen 80;
+    listen 443 ssl;
+
+    ssl_certificate  /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+
+    location /api {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_pass http://node-app:3000;
+        proxy_redirect off;
+
+    }
+}
+```
+
+
 ## EOF (2022/06/24)
 
-
-
+<!--
 #
 # [v1.25.0] "Only pull images that can't be built" should be optional #7103
 # https://github.com/docker/compose/issues/7103
@@ -148,6 +218,7 @@ docker service scale myapp_nginx=2
 # 
 # EOF (2022/05/08)
 #
+-->
 
 
 
