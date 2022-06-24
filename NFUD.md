@@ -3,7 +3,7 @@
 ![Notes from Underground](img/Notes_from_Underground.jpg)
 
 ## I. Introduction
-<span style="color:white;background:black;font-size:36px;bold:true">IT</span> is bizarre not to consider moving your websites to [Docker](https://www.docker.com/products/docker-desktop/) environment in 2022. While reducing hardware and software cost is one gain, another gain is [*scalability*](https://en.wikipedia.org/wiki/Scalability); the pain is to learn a new set of CLI Commands and  write `Dockerfile`,  `docker-compose.yml` and *optionally* `Makefile`. It's always easy to get started but difficult to become an expert. The only way is by step by step learning and applying it to more and more projects, there is no quick way to success. 
+<span style="color:white;background:black;font-size:36px;bold:true">IT</span> is bizarre not to consider moving your websites to [Docker](https://www.docker.com/products/docker-desktop/) environment in 2022. While reducing hardware and software cost is one gain, another gain is [*scalability*](https://en.wikipedia.org/wiki/Scalability); the pain is to learn a new set of CLI Commands and  write `Dockerfile`,  `docker-compose.yml` and *optionally* `Makefile`. It's always easy to get started but difficult to become an expert. The only way is step by step learning and applying it in projects, there is no quick way to it. 
 
 
 ## II. Architecture
