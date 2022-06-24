@@ -231,7 +231,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
 ```
 
 
-## V. Production environment (S mode) 
+## V. Production environment (Swarm mode) 
 
 ### Links online
 &emsp;[http](http://132.145.115.172/api/v1)
