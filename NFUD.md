@@ -283,13 +283,32 @@ docker service scale myapp_nginx=2
 ```
 ![docker service scale](img/docker_service_scale.png)
 
-```console
-```
-
 
 ## VI. Conclusion
 
 ![Never was so much owed by so many to so few](img/Winston-Churchill-Quote-Never-in-the-field-of-human-conflict-was.jpg)
+
+```lyric
+Imagine there's no VM
+It's easy if you try
+No hell below us
+Above us only sky
+Imagine all web sites
+Moving for today...
+
+Imagine there's no VM
+It isn't hard to do
+Nothing to lose or die for
+And no hassle too
+Imagine all web sites
+Running em in peace...
+
+You may say I'm a dreamer
+But I'm not the only one
+I hope someday you'll join us
+And the world will be as one
+```
+
 
 ## VII. Reference
 1. [Learn Docker - DevOps with Node.js & Express](https://www.youtube.com/watch?v=9zUHg7xjIqQ&t=356s)
@@ -303,6 +322,16 @@ docker service scale myapp_nginx=2
 
 ## VIII. Appendix 
 
+Generate SSL/TLS certificates (valid for 365 days):
+
+```bash
+openssl genrsa -out key.pem
+
+openssl req -new -key key.pem -out csr.pem
+
+openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem
+```
+
 Configuring NGINX by adding three more lines to server block in default.conf: 
 
 ```nginx 
@@ -313,7 +342,6 @@ Configuring NGINX by adding three more lines to server block in default.conf:
 ```
 
 ### default.conf
-
 ```nginx
 server {
     listen 80;
@@ -336,7 +364,7 @@ server {
 ```
 
 
-## EOF (2022/06/24)
+## EOF (2022/06/25)
 
 <!--
 #
